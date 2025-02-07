@@ -9,9 +9,9 @@ from aiogram.fsm.storage.memory import MemoryStorage
 import os
 
 # Настройки бота
-TOKEN = os.getenv("BOT_TOKEN")  # Вставь сюда свой токен из BotFather
-ADMIN_CHAT_ID = "-1002484777879"  # ID закрытой группы
-WELCOME_IMAGE_PATH = "welcome.jpg"  # Путь к изображению приветствия
+TOKEN = os.getenv("BOT_TOKEN")
+ADMIN_CHAT_ID = os.getenv("CHAT_ID")
+WELCOME_IMAGE_PATH = "welcome.jpg"
 
 # Логирование
 logging.basicConfig(level=logging.INFO)
