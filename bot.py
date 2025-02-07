@@ -6,9 +6,10 @@ from aiogram.filters import Command
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.memory import MemoryStorage
+import os
 
 # Настройки бота
-TOKEN = "8151132346:AAEPhnomb16R89Qx9pdZWADDNSTuXnstvSc"  # Вставь сюда свой токен из BotFather
+TOKEN = os.getenv("BOT_TOKEN")  # Вставь сюда свой токен из BotFather
 ADMIN_CHAT_ID = "-1002484777879"  # ID закрытой группы
 WELCOME_IMAGE_PATH = "welcome.jpg"  # Путь к изображению приветствия
 
@@ -69,7 +70,7 @@ async def process_question1(message: types.Message, state: FSMContext):
     if message.photo:
         await message.answer("❌ Это не фото-задание! Пожалуйста, напиши ответ.")
         return
-    
+
     data = await state.get_data()
     attempts = data.get("attempts", 0)
 
@@ -99,14 +100,14 @@ async def ask_question2(message: types.Message, state: FSMContext):
 async def process_question2(message: types.Message, state: FSMContext):
     data = await state.get_data()
     photo_count = data.get("photo_count", 0) + 1
-    
+
     if photo_count > 3:
         await message.answer("⚠️ Достаточно 3 фото! Но мне приятно видеть, как ты стараешься.")
         return
-    
+
     await state.update_data(photo_count=photo_count)
     await bot.forward_message(ADMIN_CHAT_ID, message.chat.id, message.message_id)
-    
+
     if photo_count < 3:
         await message.answer(f"📸 Фото {photo_count}/3 принято! Жду ещё {3 - photo_count}.")
     else:
@@ -151,14 +152,14 @@ async def ask_question4(message: types.Message, state: FSMContext):
 async def process_question4(message: types.Message, state: FSMContext):
     data = await state.get_data()
     photo_count = data.get("photo_count", 0) + 1
-    
+
     if photo_count > 1:
         await message.answer("⚠️ Одного фото мне хватит, спасибо!")
         return
-    
+
     await state.update_data(photo_count=photo_count)
     await bot.forward_message(ADMIN_CHAT_ID, message.chat.id, message.message_id)
-    
+
     await bot.send_message(ADMIN_CHAT_ID, f"📷 Пользователь @{message.from_user.username} отправил фото для задания 4")
     await message.answer("✅ Отличное фото вышло! Следующее задание!")
     await ask_question5(message, state)
@@ -185,7 +186,7 @@ async def process_question5(message: types.Message, state: FSMContext):
     if message.photo:
         await message.answer("❌ Это не фото-задание! Пожалуйста, напиши свой ответ.")
         return
-    
+
     data = await state.get_data()
     attempts = data.get("attempts", 0)
 
@@ -217,14 +218,14 @@ async def ask_question6(message: types.Message, state: FSMContext):
 async def process_question6(message: types.Message, state: FSMContext):
     data = await state.get_data()
     photo_count = data.get("photo_count", 0) + 1
-    
+
     if photo_count > 1:
         await message.answer("⚠️ Одной фотографии достаточно.")
         return
-    
+
     await state.update_data(photo_count=photo_count)
     await bot.forward_message(ADMIN_CHAT_ID, message.chat.id, message.message_id)
-    
+
     await bot.send_message(ADMIN_CHAT_ID, f"📷 Пользователь @{message.from_user.username} отправил фото для задания 6")
     await message.answer("✅ Молодец! В следующем задании тебя ждет приятная миссия!")
     await ask_question7(message, state)
@@ -252,7 +253,7 @@ async def process_question7(message: types.Message, state: FSMContext):
     if message.photo:
         await message.answer("❌ Это не фото-задание! Ощути момент и пришли ответ.")
         return
-    
+
     data = await state.get_data()
     attempts = data.get("attempts", 0)
 
@@ -285,7 +286,7 @@ async def process_question8(message: types.Message, state: FSMContext):
     if message.photo:
         await message.answer("❌ Это не фото-задание! Угадай название улицы.")
         return
-    
+
     data = await state.get_data()
     attempts = data.get("attempts", 0)
 
@@ -318,7 +319,7 @@ async def process_question9(message: types.Message, state: FSMContext):
     if message.photo:
         await message.answer("❌ Это не фото-задание! Пожалуйста, напиши название лепёшки.")
         return
-    
+
     data = await state.get_data()
     attempts = data.get("attempts", 0)
 
@@ -351,7 +352,7 @@ async def process_question10(message: types.Message, state: FSMContext):
     # Принимаем фото
     await bot.send_message(ADMIN_CHAT_ID, f"📷 Пользователь @{message.from_user.username} отправил фото для задания 10")
     await bot.forward_message(ADMIN_CHAT_ID, message.chat.id, message.message_id)
-    
+
     await message.answer(
         "✅ Замечательный снимок Суботицы!\n"
         "\n"
@@ -367,8 +368,8 @@ async def process_question10(message: types.Message, state: FSMContext):
 @dp.message(QuestState.question10)
 async def handle_text_in_question10(message: types.Message):
     await message.answer("❌ Сделай фото, которое, по твоему мнению, передаёт атмосферу Суботицы.")
-    
-    
+
+
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
