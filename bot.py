@@ -13,6 +13,10 @@ TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_CHAT_ID = os.getenv("CHAT_ID")
 WELCOME_IMAGE_PATH = "welcome.jpg"
 
+
+if TOKEN is None:
+    raise ValueError("Ошибка: переменная окружения BOT_TOKEN не задана!")
+
 # Логирование
 logging.basicConfig(level=logging.INFO)
 
