@@ -103,7 +103,6 @@ async def remove_user_command(message: types.Message):
         await message.answer(f"✅ Пользователь {user_id} удалён из списка оплативших.")
     except ValueError:
         await message.answer("❌ ID должен быть числом.")
-
 # Функция для создания клавиатуры викторины
 def get_quiz_keyboard(options):
     return InlineKeyboardMarkup(inline_keyboard=[
