@@ -46,7 +46,18 @@ async def send_welcome(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
 
     if not is_user_paid(user_id):
-        await message.answer("❌ Доступ к квесту платный! Свяжитесь с администратором для оплаты.")
+        await message.answer(
+            "Привет!\n\n"
+            "Чтобы получить доступ к боту, сделай следующее:\n\n"
+            "1️⃣ Напиши мне (@Hristina_Photo) — расскажу, как оплатить доступ.\n"
+            "2️⃣ Оплати доступ по инструкциям.\n"
+            "3️⃣ Узнай свой Telegram ID — напиши /id в @QuestForSubotica_bot.\n"
+            "4️⃣ Пришли мне свой ID (@Hristina_Photo).\n"
+            "5️⃣ Я добавлю тебя в список — после этого бот будет доступен.\n"
+            "6️⃣ Запусти бота — напиши /start в @QuestForSubotica_bot.\n\n"
+
+            "Если что-то не получается, пиши мне!"
+        )
         return
 
     photo = FSInputFile(WELCOME_IMAGE_PATH)
