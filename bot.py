@@ -40,11 +40,60 @@ class QuestState(StatesGroup):
     question9 = State()
     question10 = State()
 
+
 @dp.message(Command("id"))
 async def send_user_id(message: types.Message):
-    """Отправляет пользователю его Telegram ID без дополнительных сообщений."""
+    """Отправляет пользователю его Telegram ID"""
     user_id = message.from_user.id
-    await message.answer(f"`{user_id}`", parse_mode="Markdown")
+    await message.answer(f"📌 Ваш Telegram ID: `{user_id}`", parse_mode="Markdown")
+
+
+@dp.message(Command("add"))
+async def add_user_command(message: types.Message):
+    """Добавление пользователя в список оплативших (только для админа)"""
+    if message.from_user.id != ADMIN_ID:
+        await message.answer("❌ У вас нет прав на добавление пользователей.")
+        return
+
+    args = message.text.split()
+    if len(args) < 2:
+        await message.answer("❌ Введите ID пользователя после /add")
+        return
+
+    try:
+        user_id = int(args[1])
+        add_user(user_id)
+        await message.answer(f"✅ Пользователь {user_id} добавлен в список оплативших.")
+    except ValueError:
+        await message.answer("❌ ID должен быть числом.")
+
+@dp.message(Command("remove"))
+async def remove_user_command(message: types.Message):
+    """Удаление пользователя из списка оплативших (только для админа)"""
+    if message.from_user.id != ADMIN_ID:
+        await message.answer("❌ У вас нет прав на удаление пользователей.")
+        return
+
+    args = message.text.split()
+    if len(args) < 2:
+        await message.answer("❌ Введите ID пользователя после /remove")
+        return
+
+    try:
+        user_id = int(args[1])
+        remove_user(user_id)
+        await message.answer(f"✅ Пользователь {user_id} удалён из списка оплативших.")
+    except ValueError:
+        await message.answer("❌ ID должен быть числом.")
+# Функция для создания клавиатуры викторины
+def get_quiz_keyboard(options):
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=opt, callback_data=opt)] for opt in options
+    ])
+
+
+# Вопрос 1 (логика исправлена, чтобы правильно учитывать попытки)
+
 
 # Функция для получения клавиатуры выбора языка
 def get_language_keyboard():
