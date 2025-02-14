@@ -40,6 +40,12 @@ class QuestState(StatesGroup):
     question9 = State()
     question10 = State()
 
+@dp.message(Command("id"))
+async def send_user_id(message: types.Message):
+    """Отправляет пользователю его Telegram ID без дополнительных сообщений."""
+    user_id = message.from_user.id
+    await message.answer(f"`{user_id}`", parse_mode="Markdown")
+
 # Функция для получения клавиатуры выбора языка
 def get_language_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
