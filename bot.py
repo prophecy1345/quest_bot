@@ -45,7 +45,7 @@ class QuestState(StatesGroup):
 async def send_user_id(message: types.Message):
     """Отправляет пользователю его Telegram ID"""
     user_id = message.from_user.id
-    await message.answer(f"📌 Ваш Telegram ID: `{user_id}`", parse_mode="Markdown")
+    await message.answer(f"📌 ID: `{user_id}`", parse_mode="Markdown")
 
 
 @dp.message(Command("add"))
